@@ -1,0 +1,28 @@
+.depot_form fieldset {
+#background: #efe;
+background: #6d7fa9;
+}
+.depot_form legend {
+color: #dfd;
+background: #102b66;
+font-family: sans-serif;
+padding: 0.2em 1em;
+}
+.depot_form label {
+width: 5em;
+float: left;
+color: white;
+padding-top: 0.2em;
+margin-right: 0.1em;
+display: block;
+}
+.depot_form select, .depot_form textarea, .depot_form input {
+margin-left: 0.5em;
+}
+.order_form .submit {
+margin-left: 4em;
+}
+.order_form div {
+margin: 0.5em 0;
+}
+

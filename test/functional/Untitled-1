@@ -1,0 +1,110 @@
+
+import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+import java.util.Vector;
+
+import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
+
+import com.mysql.jdbc.ResultSetMetaData;
+public class SqlConnection {
+	
+	String userName = "pems";
+    String password = "pems";
+    String url = "jdbc:mysql://localhost/creatures";
+    Connection conn = null;
+    private Vector rows = new Vector() ;
+    private Vector cols;
+    
+    public SqlConnection() throws Exception{
+    	Class.forName ("com.mysql.jdbc.Driver").newInstance ();
+        conn = DriverManager.getConnection (url, userName, password);
+        System.out.println ("Database connection established..");
+    }
+    
+    public void showAnimals() throws SQLException{
+    	Statement s = conn.createStatement();
+    	s.executeQuery("Select id,name,category from animal");
+    	ResultSet rs = s.getResultSet();
+    	while(rs.next()){
+    		int id = rs.getInt("id");
+    		String name = rs.getString("name");
+    		String category = rs.getString("category");
+    		System.out.println(id+" "+name+" "+category);
+    	}
+    	s.close();
+    	rs.close();
+    	
+    }
+    
+    public void showAnim2() throws SQLException{
+    	Vector v = null;
+    	Statement s = conn.createStatement();
+    	s.executeQuery("Select id,name,category from animal");
+    	ResultSet rs = s.getResultSet();
+    	ResultSetMetaData rm = (ResultSetMetaData) rs.getMetaData();
+    	
+    	// lets get the columns
+    	int colCount = rm.getColumnCount();
+    	cols = new Vector(colCount);
+    	for(int i=1;i<=colCount;i++){
+    		cols.add(rm.getColumnName(i));
+    	}
+    	while(rs.next()){
+    		v = new Vector();
+    		v.add(rs.getInt("id"));
+    		v.add(rs.getString("name"));
+    		v.add(rs.getString("category"));
+    		rows.add(v);
+    	}
+    }
+    
+    public void insertIntoAnimals(String name, String category) throws SQLException{
+    	Scanner scan = new Scanner(System.in);
+    	
+    	PreparedStatement ps = conn.prepareStatement("insert into animal(name,category) values(?,?)");
+    	//System.out.println("Enter animal name");
+    	//ps.setString(1, scan.next());
+    	System.out.println("Enter animal category");
+    	//ps.setString(2, scan.next());
+    	ps.setString(1, name);
+    	ps.setString(2, category);
+    	int count = ps.executeUpdate();
+    	System.out.println(count+" row inserted");
+    	ps.close();
+    }
+    public void deleteAnimal(int id) throws SQLException{
+    	PreparedStatement ps = conn.prepareStatement("delete from animal where id=?");
+    	ps.setInt(1, id);
+    	int count = ps.executeUpdate();
+    	ps.close();
+    }
+    /*
+    public void actionPerformed(ActionEvent evt) {
+		try {
+			int op = JOptionPane.showConfirmDialog(null, "Are you shure you want to delete the selected row?","Warning",JOptionPane.YES_NO_OPTION);
+			if(op == JOptionPane.YES_OPTION){
+				SqlConnection sq = new SqlConnection();
+				sq.deleteAnimal(Integer.parseInt(value.toString()));
+				aTableModel.removeRow(aTable.getSelectedRow());
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	*/
+    /*
+     * int[] selectedRows = aTable.getSelectedRows();
+		TableModel tm = aTable.getModel();
+		value = tm.getValueAt(selectedRows[0],0);
+     */
+
+}
+
