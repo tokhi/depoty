@@ -7,6 +7,11 @@ gem 'rails', '3.2.3'
 gem 'therubyracer'
 gem 'sqlite3'
 gem 'will_paginate', '>= 3.0.pre'
+#
+gem 'devise'
+gem 'cancan'
+gem 'rolify'
+
 
 # Gems used only for assets and not required
 # in production environments by default.

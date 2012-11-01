@@ -5,6 +5,7 @@ require File.expand_path('../application', __FILE__)
 Depot::Application.initialize!
 #
 Depot::Application.configure do
+config.action_mailer.default_url_options = { :host => 'localhost' }
 config.action_mailer.delivery_method = :test
 end
 #Depot::Application.configure do
